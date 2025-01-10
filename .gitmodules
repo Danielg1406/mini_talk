@@ -1,0 +1,6 @@
+[submodule "printf"]
+	path = printf
+	url = https://github.com/Danielg1406/printf
+[submodule "42_libft"]
+	path = 42_libft
+	url = https://github.com/Danielg1406/42_libft
