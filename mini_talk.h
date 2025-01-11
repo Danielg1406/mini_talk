@@ -6,7 +6,7 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:49:59 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/01/10 20:39:08 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/01/11 14:34:20 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,8 @@
 
 # include "42_libft/libft.h"
 # include "printf/ft_printf.h"
+# include <signal.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 #endif
