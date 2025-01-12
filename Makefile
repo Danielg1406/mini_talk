@@ -22,11 +22,12 @@ all: submodules server client
 submodules:
 	@git submodule update --init --recursive $(LIBFT_DIR)
 	@git submodule update --init --recursive $(PRINTF_DIR)
+	@git submodule foreach git pull origin main
 
-server: $(OBJ_SERVER) $(LIBFT) $(PRINTF)
+server: submodules $(OBJ_SERVER) $(LIBFT) $(PRINTF)
 	$(CC) $(CFLAGS) -I$(HEADER_DIR) -I$(LIBFT_DIR) -I$(PRINTF_DIR) -o server $(OBJ_SERVER) $(LIBFT) $(PRINTF)
 
-client: $(OBJ_CLIENT) $(LIBFT) $(PRINTF)
+client: submodules $(OBJ_CLIENT) $(LIBFT) $(PRINTF)
 	$(CC) $(CFLAGS) -I$(HEADER_DIR) -I$(LIBFT_DIR) -I$(PRINTF_DIR) -o client $(OBJ_CLIENT) $(LIBFT) $(PRINTF)
 
 $(LIBFT):
