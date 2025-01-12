@@ -19,4 +19,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+void	set_signal(int sig, void *signal_handler, int flag);
+
 #endif

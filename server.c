@@ -11,23 +11,6 @@
 /* ************************************************************************** */
 
 #include "mini_talk.h"
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yourname <yourname@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: YYYY/MM/DD HH:MM:SS by yourname         #+#    #+#             */
-/*   Updated: YYYY/MM/DD HH:MM:SS by yourname         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "mini_talk.h"
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 static void	signal_handler(int sig, siginfo_t *info, void *context)
 {
@@ -43,22 +26,22 @@ static void	signal_handler(int sig, siginfo_t *info, void *context)
 		if (character == '\0')
 		{
 			write(1, "\n", 1);
-			kill(info->si_pid, SIGUSR1);
+			kill(info->si_pid, SIGUSR2);
 		}
 		else
 			write(1, &character, 1);
 		character = 0;
 		bit_count = 0;
 	}
+	if (kill(info->si_pid, SIGUSR1) == -1)
+	{
+		write(2, "Error sending acknowledgment\n", 29);
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	main(void)
 {
-	struct sigaction	sa;
-
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = signal_handler;
-	sigemptyset(&sa.sa_mask);
 	ft_printf("\033[1;96m");
 	ft_printf("\n");
 	ft_printf("███╗   ███╗██╗███╗   ██╗██ ████████╗ █████╗ ██╗     ██╗  ██╗\n");
@@ -69,9 +52,8 @@ int	main(void)
 	ft_printf("╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝\n");
 	ft_printf("\nServer PID: %d\n", getpid());
 	ft_printf("\033[0m\n");
-	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) ==
-		-1)
-		exit(EXIT_FAILURE);
+	set_signal(SIGUSR1, signal_handler, SA_SIGINFO);
+	set_signal(SIGUSR2, signal_handler, SA_SIGINFO);
 	while (1)
 		pause();
 	return (0);

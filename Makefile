@@ -9,8 +9,8 @@ PRINTF = $(PRINTF_DIR)/libftprintf.a
 HEADER_DIR = .
 HEADER = mini_talk.h
 
-SRC_SERVER = server.c
-SRC_CLIENT = client.c
+SRC_SERVER = server.c utils.c
+SRC_CLIENT = client.c utils.c
 
 OBJ_SERVER = $(SRC_SERVER:%.c=%.o)
 OBJ_CLIENT = $(SRC_CLIENT:%.c=%.o)

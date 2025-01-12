@@ -11,17 +11,20 @@
 /* ************************************************************************** */
 
 #include "mini_talk.h"
-#include <stdio.h>
-#include <string.h>
-#include <sys/types.h>
 
-static volatile int	acknowledge_received = 0;
+volatile sig_atomic_t	g_acknowledge_received = 0;
+
+static void	received_message(int sig)
+{
+	(void)sig;
+	write(1, "\n\tMessage received by server\n", 29);
+	exit(EXIT_SUCCESS);
+}
 
 static void	acknowledge_signal(int sig)
 {
 	(void)sig;
-	acknowledge_received = 1;
-	write(1, "Message received\n", 18);
+	g_acknowledge_received = 1;
 }
 
 static void	send_signal(pid_t pid, char c)
@@ -35,7 +38,7 @@ static void	send_signal(pid_t pid, char c)
 		{
 			if (kill(pid, SIGUSR1) == -1)
 			{
-				perror("Error sending SIGUSR1");
+				write(2, "Error sending SIGUSR1", 22);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -43,12 +46,14 @@ static void	send_signal(pid_t pid, char c)
 		{
 			if (kill(pid, SIGUSR2) == -1)
 			{
-				perror("Error sending SIGUSR2");
+				write(2, "Error sending SIGUSR2", 22);
 				exit(EXIT_FAILURE);
 			}
 		}
-		usleep(505);
 		bit++;
+		while (!g_acknowledge_received)
+			usleep(50);
+		g_acknowledge_received = 0;
 	}
 }
 
@@ -63,13 +68,10 @@ int	main(int argc, char **argv)
 		ft_printf("Usage: ./client <server_pid> <message>\n");
 		return (EXIT_FAILURE);
 	}
-	server_pid = (pid_t)ft_atoi(argv[1]);
+	server_pid = ft_atoi(argv[1]);
 	message = argv[2];
-	if (signal(SIGUSR1, acknowledge_signal) == SIG_ERR)
-	{
-		perror("signal");
-		exit(EXIT_FAILURE);
-	}
+	set_signal(SIGUSR1, acknowledge_signal, 0);
+	set_signal(SIGUSR2, received_message, 0);
 	i = 0;
 	while (message[i] != '\0')
 	{
@@ -77,7 +79,5 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	send_signal(server_pid, '\0');
-	// while (!acknowledge_received)
-	// 	usleep(50);
 	return (EXIT_SUCCESS);
 }
