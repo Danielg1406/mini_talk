@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/12 12:27:35 by dgomez-a          #+#    #+#             */
+/*   Updated: 2025/01/12 12:28:28 by dgomez-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mini_talk.h"
 
 void	set_signal(int sig, void *signal_handler, int flag)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	if (flag == SA_SIGINFO)
 	{

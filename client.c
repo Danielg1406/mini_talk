@@ -6,7 +6,7 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:49:47 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/01/11 15:36:59 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/01/12 12:39:57 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,15 @@ static void	acknowledge_signal(int sig)
 	g_acknowledge_received = 1;
 }
 
+static void	error_signal(pid_t pid, int sig)
+{
+	if (kill(pid, sig) == -1)
+	{
+		write(2, "Error sending signal\n", 21);
+		exit(EXIT_FAILURE);
+	}
+}
+
 static void	send_signal(pid_t pid, char c)
 {
 	int	bit;
@@ -35,21 +44,9 @@ static void	send_signal(pid_t pid, char c)
 	while (bit < 8)
 	{
 		if ((c >> (7 - bit)) & 1)
-		{
-			if (kill(pid, SIGUSR1) == -1)
-			{
-				write(2, "Error sending SIGUSR1", 22);
-				exit(EXIT_FAILURE);
-			}
-		}
+			error_signal(pid, SIGUSR1);
 		else
-		{
-			if (kill(pid, SIGUSR2) == -1)
-			{
-				write(2, "Error sending SIGUSR2", 22);
-				exit(EXIT_FAILURE);
-			}
-		}
+			error_signal(pid, SIGUSR2);
 		bit++;
 		while (!g_acknowledge_received)
 			usleep(50);
