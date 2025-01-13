@@ -16,6 +16,7 @@ void	set_signal(int sig, void *signal_handler, int flag)
 {
 	struct sigaction	sa;
 
+	ft_memset(&sa, 0, sizeof(sa));
 	if (flag == SA_SIGINFO)
 	{
 		sa.sa_flags = flag;

@@ -6,7 +6,7 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:49:47 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/01/12 12:39:57 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/01/13 18:32:36 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ static void	error_signal(pid_t pid, int sig)
 		write(2, "Error sending signal\n", 21);
 		exit(EXIT_FAILURE);
 	}
+}
+
+static void	sigint_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n\tInterrupt received. Exiting...\n", 32);
+	g_acknowledge_received = 0;
+	exit(EXIT_SUCCESS);
 }
 
 static void	send_signal(pid_t pid, char c)
@@ -67,6 +75,7 @@ int	main(int argc, char **argv)
 	}
 	server_pid = ft_atoi(argv[1]);
 	message = argv[2];
+	set_signal(SIGINT, sigint_handler, 0);
 	set_signal(SIGUSR1, acknowledge_signal, 0);
 	set_signal(SIGUSR2, received_message, 0);
 	i = 0;
