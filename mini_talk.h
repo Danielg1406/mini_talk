@@ -6,7 +6,7 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:49:59 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/01/11 14:34:20 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/01/13 20:02:36 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+void	received_message(int sig);
+void	error_signal(pid_t pid, int sig);
 void	set_signal(int sig, void *signal_handler, int flag);
 
 #endif

@@ -12,6 +12,22 @@
 
 #include "mini_talk.h"
 
+void	received_message(int sig)
+{
+	(void)sig;
+	write(1, "\n\tMessage received by server\n", 29);
+	exit(EXIT_SUCCESS);
+}
+
+void	error_signal(pid_t pid, int sig)
+{
+	if (kill(pid, sig) == -1)
+	{
+		write(2, "Error sending signal\n", 21);
+		exit(EXIT_FAILURE);
+	}
+}
+
 void	set_signal(int sig, void *signal_handler, int flag)
 {
 	struct sigaction	sa;

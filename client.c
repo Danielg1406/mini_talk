@@ -6,7 +6,7 @@
 /*   By: dgomez-a <dgomez-a@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:49:47 by dgomez-a          #+#    #+#             */
-/*   Updated: 2025/01/13 18:32:36 by dgomez-a         ###   ########.fr       */
+/*   Updated: 2025/01/13 20:01:07 by dgomez-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,10 @@
 
 volatile sig_atomic_t	g_acknowledge_received = 0;
 
-static void	received_message(int sig)
-{
-	(void)sig;
-	write(1, "\n\tMessage received by server\n", 29);
-	exit(EXIT_SUCCESS);
-}
-
 static void	acknowledge_signal(int sig)
 {
 	(void)sig;
 	g_acknowledge_received = 1;
-}
-
-static void	error_signal(pid_t pid, int sig)
-{
-	if (kill(pid, sig) == -1)
-	{
-		write(2, "Error sending signal\n", 21);
-		exit(EXIT_FAILURE);
-	}
 }
 
 static void	sigint_handler(int sig)
@@ -57,7 +41,7 @@ static void	send_signal(pid_t pid, char c)
 			error_signal(pid, SIGUSR2);
 		bit++;
 		while (!g_acknowledge_received)
-			usleep(50);
+			usleep(100);
 		g_acknowledge_received = 0;
 	}
 }
